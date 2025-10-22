@@ -1,4 +1,4 @@
-package com.example.projeto;
+package com.nossoprojeto.petshop;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
