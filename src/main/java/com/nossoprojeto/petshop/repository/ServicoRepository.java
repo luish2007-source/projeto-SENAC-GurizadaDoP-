@@ -1,5 +1,7 @@
 package com.nossoprojeto.petshop.repository;
 
-public class ServicoRepository {
-    
+import com.nossoprojeto.petshop.domain.entity.Servico;
+import org.springframework.data.jpa.repository.JpaRepository;
+
+public interface ServicoRepository extends JpaRepository<Servico, Long> {
 }
