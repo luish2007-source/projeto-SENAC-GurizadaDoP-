@@ -5,32 +5,43 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>PetShop</title>
     <link rel="stylesheet" href="css/app.css">
+    <script src="js/extra.js" defer></script>
 </head>
 <body>
+    <!-- Navegação -->
     <nav class="navbar">
         <a href="index.html" class="navbar-brand">🐾 PetShop</a>
         <div class="navbar-nav">
-            <a class="nav-link" href="#">Tutores</a>
-            <a class="nav-link" href="#">Pets</a>
-            <a class="nav-link" href="#">Atendimentos</a>
+            <a class="nav-link" href="tutores.html">Tutores</a>
+            <a class="nav-link" href="pets.html">Pets</a>
+            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
         </div>
     </nav>
- 
+
+    <!-- Conteúdo principal -->
     <main class="container">
-        <h1>Bem-vindo ao Sistema PetShop</h1>
-        <p>Gerencie tutores, pets, serviços e atendimentos de forma simples e rápida.</p>
- 
-        <div class="home-links">
-            <a href="#">Gerenciar Tutores</a>
-            <a href="#">Gerenciar Pets</a>
-            <a href="#">Gerenciar Serviços</a>
-            <a href="#">Gerenciar Atendimentos</a>
+        <div class="gallery" id="gallery"></div> <!-- Fundo com imagens -->
+
+        <div class="overlay">
+            <h1>Bem-vindo ao Sistema PetShop</h1>
+            <p>Gerencie tutores, pets, serviços e atendimentos de forma simples e rápida.</p>
+
+            <div class="home-links">
+                <a href="tutores.html">Gerenciar Tutores</a>
+                <a href="pets.html">Gerenciar Pets</a>
+                <a href="servicos.html">Gerenciar Serviços</a>
+                <a href="atendimentos.html">Gerenciar Atendimentos</a>
+            </div>
+
+            <div class="buttonExtra">
+                <a href="extra.html">Veja mais alguns bichos aqui</a>
+            </div>
         </div>
     </main>
- 
+
+    <!-- Rodapé -->
     <footer>
         &copy; 2025 PetShop — Todos os direitos reservados.
     </footer>
 </body>
 </html>
- 
