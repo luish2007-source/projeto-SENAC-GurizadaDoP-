@@ -5,8 +5,36 @@
 }
 
 body{
-    padding: 16px;
-    background-color: black;
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-color: #111;
+    overflow-x: hidden;
+}
+
+.navbar {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    padding: 1rem 2rem;
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar-nav a {
+    color: #ddd;
+    margin-left: 1rem;
+    text-decoration: none;
+}
+
+.navbar-nav a:hover {
+    color: #fff;
 }
 
 .gallery{

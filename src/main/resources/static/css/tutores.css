@@ -1,0 +1,172 @@
+/* --- Reset e base --- */
+body {
+    margin: 0;
+    font-family: Arial, sans-serif;
+    color: #fff;
+    background-color: #111;
+    overflow-x: hidden;
+}
+
+/* --- Navbar (opcional, se tiver no resto do sistema) --- */
+.navbar {
+    display: flex;
+    height: 60px;
+    justify-content: space-between;
+    align-items: center;
+    background-color: #222;
+    padding: 1rem 2rem;
+    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+}
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #fff;
+    text-decoration: none;
+}
+
+.navbar-nav a {
+    color: #ddd;
+    margin-left: 1rem;
+    text-decoration: none;
+    transition: color 0.3s;
+}
+
+.navbar-nav a:hover {
+    color: #ff9800;
+}
+
+/* --- Container principal --- */
+.container {
+    max-width: 1000px;
+    margin: 2rem auto;
+    padding: 2rem;
+    background: rgba(34, 34, 34, 0.9);
+    border-radius: 10px;
+    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+}
+
+/* --- Títulos --- */
+h1 {
+    text-align: center;
+    margin-bottom: 2rem;
+    font-size: 2rem;
+    color: #ff9800;
+}
+
+/* --- Formulário de tutor --- */
+form {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 1rem;
+    margin-bottom: 2rem;
+}
+
+/* --- Linha de botões no formulário --- */
+.form-actions {
+    width: 100%;
+    display: flex;
+    justify-content: flex-end;
+    gap: 1rem;
+    margin-top: 1rem;
+}
+
+.form-actions .btn {
+    width: auto;
+}
+
+
+.form-group {
+    flex: 1 1 45%;
+    min-width: 220px;
+}
+
+.form-label {
+    display: block;
+    margin-bottom: 0.5rem;
+    font-weight: bold;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.6rem 0.8rem;
+    border: 1px solid #444;
+    border-radius: 6px;
+    background-color: #222;
+    color: #fff;
+    font-size: 1rem;
+}
+
+.form-control:focus {
+    border-color: #ff9800;
+    outline: none;
+}
+
+/* --- Botão --- */
+.form-actions .btn {
+    padding: 0.7rem 1.5rem;
+    border: none;
+    border-radius: 6px;
+    font-size: 1rem;
+    font-weight: bold;
+    cursor: pointer;
+    transition: 0.3s;
+}
+
+.btn-primary {
+    background-color: #ff9800;
+    color: #111;
+}
+
+.btn-primary:hover {
+    background-color: #ffa726;
+    transform: scale(1.05);
+}
+
+/* --- Tabela de tutores --- */
+.table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 1rem;
+    color: #fff;
+}
+
+.table th,
+.table td {
+    border-bottom: 1px solid #444;
+    padding: 0.8rem;
+    text-align: left;
+}
+
+.table th {
+    background-color: #222;
+    color: #ff9800;
+    text-transform: uppercase;
+}
+
+.table-striped tbody tr:nth-child(even) {
+    background-color: #1a1a1a;
+}
+
+.table-striped tbody tr:hover {
+    background-color: #2a2a2a;
+}
+
+/* --- Alinhamento à direita --- */
+.text-end {
+    text-align: right;
+}
+
+/* --- Responsividade --- */
+@media (max-width: 768px) {
+    .container {
+        padding: 1rem;
+    }
+
+    form {
+        flex-direction: column;
+    }
+
+    .form-actions .btn {
+        width: 100%;
+    }
+}

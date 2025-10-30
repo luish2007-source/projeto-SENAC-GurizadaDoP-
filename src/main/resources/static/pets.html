@@ -1,0 +1,69 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pets</title>
+    <link rel="stylesheet" href="css/pets.css">
+</head>
+<body>
+    <nav class="navbar">
+        <a href="index.html" class="navbar-brand">🐾 PetShop</a>
+        <div class="navbar-nav">
+            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
+            <a class="nav-link" href="pets.html">Pets</a>
+            <a class="nav-link" href="servico.html">Serviços</a>
+            <a class="nav-link" href="tutores.html">Tutores</a>
+        </div>
+    </nav>
+    <main class="container py-4"> 
+        <h1 class="h3 mb-3">Gerenciar Pets</h1> 
+        <form id="petForm" class="row g-3 mb-4"> 
+            <input type="hidden" id="petId"> 
+            <div class="col-md-3"> <label class="form-label">Nome*</label>
+                <input id="nome" class="form-control" required> 
+            </div> 
+    <div class="col-md-3"> 
+        <label class="form-label">Espécie*</label> 
+        <input id="especie" class="form-control" required> 
+    </div> 
+    <div class="col-md-3"> 
+        <label class="form-label">Raça</label> 
+        <input id="raca" class="form-control"> 
+    </div> 
+    <div class="col-md-3"> 
+        <label class="form-label">Nascimento</label> 
+        <input id="dataNascimento" type="date" class="form-control"> 
+    </div> 
+    <div class="col-md-3"> 
+        <label class="form-label">Tutor*</label> 
+        <select id="tutorId" class="form-select" required></select> 
+    </div> 
+    <div class="col-12"> 
+        <button class="btn btn-primary" type="submit">Salvar</button> 
+        <button class="btn btn-secondary" type="button" id="btnLimpar">Limpar</button> 
+    </div> 
+</form> 
+<div class="table-responsive"> 
+    <table class="table table-striped align-middle" id="tblPets"> 
+        <thead> 
+            <tr> 
+                <th>#</th>
+                <th>Nome</th>
+                <th>Espécie</th>
+                <th>Raça</th>
+                <th>Tutor</th>
+                <th class="text-end">Ações</th> 
+            </tr> 
+        </thead> 
+        <tbody></tbody> 
+    </table> 
+</div> 
+</main>
+
+    <!-- Rodapé -->
+    <footer>
+        &copy; 2025 PetShop — Todos os direitos reservados.
+    </footer>
+</body>
+</html>
