@@ -9,29 +9,33 @@ const emailInput = document.getElementById('email');
 const tabela = document.getElementById('tutor-table-body');
 const btnLimpar = document.getElementById('btnLimpar');
 
-// Função para buscar e renderizar tutores
 async function carregarTutores() {
     try {
-        const resposta = await fetch(API_URL);
-        if (!resposta.ok) throw new Error('Erro ao buscar tutores');
-        const tutores = await resposta.json();
+        const resposta = await fetch('http://localhost:8080/api/tutores');
+        const dados = await resposta.json();
+
+        // o array real está dentro de 'content'
+        const tutores = dados.content || [];
+
         atualizarTabela(tutores);
     } catch (erro) {
-        console.error(erro);
-        alert('Erro ao carregar tutores.');
+        console.error("Erro ao carregar tutores:", erro);
+        alert("Erro ao carregar tutores.");
     }
 }
 
-// Renderiza a tabela
+
 function atualizarTabela(tutores) {
-    tabela.innerHTML = '';
+    const tabela = document.getElementById("tutor-table-body");
+    tabela.innerHTML = "";
+
     tutores.forEach(tutor => {
-        const tr = document.createElement('tr');
+        const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${tutor.id}</td>
             <td>${tutor.nome}</td>
             <td>${tutor.telefone}</td>
-            <td>${tutor.email || '-'}</td>
+            <td>${tutor.email || "-"}</td>
         `;
         tabela.appendChild(tr);
     });
