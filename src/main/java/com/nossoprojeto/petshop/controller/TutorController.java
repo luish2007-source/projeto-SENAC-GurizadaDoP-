@@ -1,48 +1,48 @@
+// Seu controller corrigido
 package com.nossoprojeto.petshop.controller;
 
-import com.nossoprojeto.petshop.domain.entity.Tutor;
-import com.nossoprojeto.petshop.repository.TutorRepository;
+import com.nossoprojeto.petshop.domain.dto.tutor.TutorRequest;
+import com.nossoprojeto.petshop.domain.dto.tutor.TutorResponse;
+import com.nossoprojeto.petshop.service.TutorService; // Importa o SERVICE
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
+// (imports...)
 
 @RestController
 @RequestMapping("/api/tutores")
 public class TutorController {
 
-    private final TutorRepository repo;
+    // 1. INJETA O SERVICE (não o repository)
+    private final TutorService service;
 
-    public TutorController(TutorRepository repo) {
-        this.repo = repo;
+    public TutorController(TutorService service) {
+        this.service = service;
     }
 
+    // 2. USA PAGINAÇÃO (Pageable) e DTO (TutorResponse)
     @GetMapping
-    public List<Tutor> listar() {
-        return repo.findAll();
+    public ResponseEntity<Page<TutorResponse>> listar(Pageable pageable) {
+        Page<TutorResponse> page = service.findAll(pageable);
+        return ResponseEntity.ok(page);
     }
 
+    // 3. USA DTO (TutorResponse)
     @GetMapping("/{id}")
-    public Tutor buscar(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
+    public ResponseEntity<TutorResponse> buscar(@PathVariable Long id) {
+        TutorResponse dto = service.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
+    // 4. USA DTO (TutorRequest) e @Valid (não esqueça)
     @PostMapping
-    public Tutor criar(@RequestBody Tutor tutor) {
-        tutor.setId(null); // garante que será criado um novo registro
-        return repo.save(tutor);
+    public ResponseEntity<TutorResponse> criar(@RequestBody TutorRequest dto) { // @Valid TutorRequest dto
+        TutorResponse response = service.save(dto);
+        // Retorna 201 Created
+        return ResponseEntity.status(201).body(response); 
     }
 
-    @PutMapping("/{id}")
-    public Tutor atualizar(@PathVariable Long id, @RequestBody Tutor tutor) {
-        Tutor atual = repo.findById(id).orElseThrow();
-        atual.setNome(tutor.getNome());
-        atual.setTelefone(tutor.getTelefone());
-        atual.setEmail(tutor.getEmail());
-        return repo.save(atual);
-    }
-
-    @DeleteMapping("/{id}")
-    public void apagar(@PathVariable Long id) {
-        repo.deleteById(id);
-    }
+    // ... incluir PUT e DELETE, sempre usando o Service e DTOs
 }
