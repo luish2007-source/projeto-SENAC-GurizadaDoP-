@@ -1,55 +1,55 @@
+// Caminho: src/main/java/com/nossoprojeto/petshop/controller/PetController.java
 package com.nossoprojeto.petshop.controller;
 
-import com.nossoprojeto.petshop.domain.entity.Pet;
-import com.nossoprojeto.petshop.repository.PetRepository;
-import com.nossoprojeto.petshop.repository.TutorRepository;
+import com.nossoprojeto.petshop.domain.dto.pet.PetRequest;
+import com.nossoprojeto.petshop.domain.dto.pet.PetResponse;
+import com.nossoprojeto.petshop.service.PetService; // IMPORTA O SERVICE
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/pets")
 public class PetController {
 
-    private final PetRepository petRepo;
-    private final TutorRepository tutorRepo;
+    private final PetService service; // INJETA O SERVICE
 
-    public PetController(PetRepository petRepo, TutorRepository tutorRepo) {
-        this.petRepo = petRepo;
-        this.tutorRepo = tutorRepo;
+    public PetController(PetService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public List<Pet> listar() {
-        return petRepo.findAll();
+    public ResponseEntity<Page<PetResponse>> listar(Pageable pageable) {
+        Page<PetResponse> page = service.findAll(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
-    public Pet buscar(@PathVariable Long id) {
-        return petRepo.findById(id).orElseThrow();
+    public ResponseEntity<PetResponse> buscar(@PathVariable Long id) {
+        PetResponse dto = service.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Pet criar(@RequestBody Pet pet) {
-        pet.setId(null); // garante que será criado um novo registro
-        // Regra: só cria se tutor existir
-        tutorRepo.findById(pet.getTutor().getId()).orElseThrow();
-        return petRepo.save(pet);
+    public ResponseEntity<PetResponse> criar(@Valid @RequestBody PetRequest dto, UriComponentsBuilder uriBuilder) {
+        PetResponse response = service.save(dto);
+        URI uri = uriBuilder.path("/api/pets/{id}").buildAndExpand(response.id()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/{id}")
-    public Pet atualizar(@PathVariable Long id, @RequestBody Pet pet) {
-        Pet atual = petRepo.findById(id).orElseThrow();
-        atual.setNome(pet.getNome());
-        atual.setEspecie(pet.getEspecie());
-        atual.setRaca(pet.getRaca());
-        atual.setDataNascimento(pet.getDataNascimento());
-        atual.setTutor(pet.getTutor());
-        return petRepo.save(atual);
+    public ResponseEntity<PetResponse> atualizar(@PathVariable Long id, @Valid @RequestBody PetRequest dto) {
+        PetResponse response = service.update(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public void apagar(@PathVariable Long id) {
-        petRepo.deleteById(id);
+    public ResponseEntity<Void> apagar(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

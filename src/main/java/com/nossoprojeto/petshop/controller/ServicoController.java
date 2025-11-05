@@ -1,48 +1,55 @@
+// Caminho: src/main/java/com/nossoprojeto/petshop/controller/ServicoController.java
 package com.nossoprojeto.petshop.controller;
 
-import com.nossoprojeto.petshop.domain.entity.Servico;
-import com.nossoprojeto.petshop.repository.ServicoRepository;
+import com.nossoprojeto.petshop.domain.dto.servico.ServicoRequest;
+import com.nossoprojeto.petshop.domain.dto.servico.ServicoResponse;
+import com.nossoprojeto.petshop.service.ServicoService; // IMPORTA O SERVICE
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/servicos")
 public class ServicoController {
 
-    private final ServicoRepository repo;
+    private final ServicoService service; // INJETA O SERVICE
 
-    public ServicoController(ServicoRepository repo) {
-        this.repo = repo;
+    public ServicoController(ServicoService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public List<Servico> listar() {
-        return repo.findAll();
+    public ResponseEntity<Page<ServicoResponse>> listar(Pageable pageable) {
+        Page<ServicoResponse> page = service.findAll(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
-    public Servico buscar(@PathVariable Long id) {
-        return repo.findById(id).orElseThrow();
+    public ResponseEntity<ServicoResponse> buscar(@PathVariable Long id) {
+        ServicoResponse dto = service.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Servico criar(@RequestBody Servico servico) {
-        servico.setId(null); // garante que será criado um novo registro
-        return repo.save(servico);
+    public ResponseEntity<ServicoResponse> criar(@Valid @RequestBody ServicoRequest dto, UriComponentsBuilder uriBuilder) {
+        ServicoResponse response = service.save(dto);
+        URI uri = uriBuilder.path("/api/servicos/{id}").buildAndExpand(response.id()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/{id}")
-    public Servico atualizar(@PathVariable Long id, @RequestBody Servico servico) {
-        Servico atual = repo.findById(id).orElseThrow();
-        atual.setDescricao(servico.getDescricao());
-        atual.setValor(servico.getValor());
-        atual.setDuracaoMinutos(servico.getDuracaoMinutos());
-        return repo.save(atual);
+    public ResponseEntity<ServicoResponse> atualizar(@PathVariable Long id, @Valid @RequestBody ServicoRequest dto) {
+        ServicoResponse response = service.update(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public void apagar(@PathVariable Long id) {
-        repo.deleteById(id);
+    public ResponseEntity<Void> apagar(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }

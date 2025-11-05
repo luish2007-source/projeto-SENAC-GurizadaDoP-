@@ -1,58 +1,55 @@
+// Caminho: src/main/java/com/nossoprojeto/petshop/controller/AtendimentoController.java
 package com.nossoprojeto.petshop.controller;
 
-import com.nossoprojeto.petshop.domain.entity.Atendimento;
-import com.nossoprojeto.petshop.repository.AtendimentoRepository;
-import com.nossoprojeto.petshop.repository.PetRepository;
-import com.nossoprojeto.petshop.repository.ServicoRepository;
+import com.nossoprojeto.petshop.domain.dto.atendimento.AtendimentoRequest;
+import com.nossoprojeto.petshop.domain.dto.atendimento.AtendimentoResponse;
+import com.nossoprojeto.petshop.service.AtendimentoService; // IMPORTA O SERVICE
+import jakarta.validation.Valid;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
-
-import java.util.List;
+import org.springframework.web.util.UriComponentsBuilder;
+import java.net.URI;
 
 @RestController
 @RequestMapping("/api/atendimentos")
 public class AtendimentoController {
 
-    private final AtendimentoRepository atendimentoRepo;
-    private final PetRepository petRepo;
-    private final ServicoRepository servicoRepo;
+    private final AtendimentoService service; // INJETA O SERVICE
 
-    public AtendimentoController(AtendimentoRepository atendimentoRepo, PetRepository petRepo, ServicoRepository servicoRepo) {
-        this.atendimentoRepo = atendimentoRepo;
-        this.petRepo = petRepo;
-        this.servicoRepo = servicoRepo;
+    public AtendimentoController(AtendimentoService service) {
+        this.service = service;
     }
 
     @GetMapping
-    public List<Atendimento> listar() {
-        return atendimentoRepo.findAll();
+    public ResponseEntity<Page<AtendimentoResponse>> listar(Pageable pageable) {
+        Page<AtendimentoResponse> page = service.findAll(pageable);
+        return ResponseEntity.ok(page);
     }
 
     @GetMapping("/{id}")
-    public Atendimento buscar(@PathVariable Long id) {
-        return atendimentoRepo.findById(id).orElseThrow();
+    public ResponseEntity<AtendimentoResponse> buscar(@PathVariable Long id) {
+        AtendimentoResponse dto = service.findById(id);
+        return ResponseEntity.ok(dto);
     }
 
     @PostMapping
-    public Atendimento criar(@RequestBody Atendimento atendimento) {
-        atendimento.setId(null); // garante que será criado um novo registro
-        // Regra: petId e servicoId devem existir
-        petRepo.findById(atendimento.getPet().getId()).orElseThrow();
-        servicoRepo.findById(atendimento.getServico().getId()).orElseThrow();
-        return atendimentoRepo.save(atendimento);
+    public ResponseEntity<AtendimentoResponse> criar(@Valid @RequestBody AtendimentoRequest dto, UriComponentsBuilder uriBuilder) {
+        AtendimentoResponse response = service.save(dto);
+        URI uri = uriBuilder.path("/api/atendimentos/{id}").buildAndExpand(response.id()).toUri();
+        return ResponseEntity.created(uri).body(response);
     }
 
     @PutMapping("/{id}")
-    public Atendimento atualizar(@PathVariable Long id, @RequestBody Atendimento atendimento) {
-        Atendimento atual = atendimentoRepo.findById(id).orElseThrow();
-        atual.setDataHora(atendimento.getDataHora());
-        atual.setPet(atendimento.getPet());
-        atual.setServico(atendimento.getServico());
-        atual.setObservacoes(atendimento.getObservacoes());
-        return atendimentoRepo.save(atual);
+    public ResponseEntity<AtendimentoResponse> atualizar(@PathVariable Long id, @Valid @RequestBody AtendimentoRequest dto) {
+        AtendimentoResponse response = service.update(id, dto);
+        return ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
-    public void apagar(@PathVariable Long id) {
-        atendimentoRepo.deleteById(id);
+    public ResponseEntity<Void> apagar(@PathVariable Long id) {
+        service.delete(id);
+        return ResponseEntity.noContent().build();
     }
 }
