@@ -3,8 +3,9 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>atendimentos</title>
-    <link rel="stylesheet" href="css/app.css">
+    <title>Atendimentos</title>
+    <!-- CSS específico para esta página -->
+    <link rel="stylesheet" href="css/atendimento.css">
 </head>
 <body>
     <nav class="navbar">
@@ -16,7 +17,73 @@
             <a class="nav-link" href="tutores.html">Tutores</a>
         </div>
     </nav>
-    
-        
+
+    <main class="container">
+        <h1>Gestão de Atendimentos</h1>
+
+        <!-- Formulário de Cadastro/Edição -->
+        <form id="atendimentoForm" class="form-cadastro">
+            <!-- ID oculto para edição -->
+            <input type="hidden" id="editAtendimentoId">
+            
+            <div class="form-group">
+                <label for="dataHora">Data e Hora *</label>
+                <!-- O input datetime-local é ideal para LocalDateTime -->
+                <input type="datetime-local" id="dataHora" class="form-control" required>
+            </div>
+            
+            <div class="form-group">
+                <label for="petId">Pet *</label>
+                <!-- Este <select> será populado pelo JS -->
+                <select id="petId" class="form-control" required>
+                    <option value="">Carregando pets...</option>
+                </select>
+            </div>
+            
+            <div class="form-group">
+                <label for="servicoId">Serviço *</label>
+                <!-- Este <select> será populado pelo JS -->
+                <select id="servicoId" class="form-control" required>
+                    <option value="">Carregando serviços...</option>
+                </select>
+            </div>
+
+            <!-- Grupo de 100% de largura para observações -->
+            <div class="form-group form-group-full">
+                <label for="observacoes">Observações</label>
+                <textarea id="observacoes" class="form-control"></textarea>
+            </div>
+
+            <div class="form-actions">
+                <button type="submit" class="btn btn-primary">Salvar</button>
+                <button type="button" id="btnLimpar" class="btn btn-secondary">Limpar</button>
+            </div>
+        </form>
+
+        <!-- Tabela de Atendimentos -->
+        <table class="table table-striped">
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Data/Hora</th>
+                    <th>Pet</th>
+                    <th>Serviço</th>
+                    <th>Observações</th>
+                    <th>Ações</th>
+                </tr>
+            </thead>
+            <tbody id="atendimento-table-body">
+                <!-- Linhas serão injetadas pelo atendimento.js -->
+            </tbody>
+        </table>
+    </main>
+
+    <footer>
+        &copy; 2025 PetShop — Todos os direitos reservados.
+    </footer>
+
+    <!-- Scripts (CARREGUE O API.JS PRIMEIRO!) -->
+    <script src="js/api.js"></script>
+    <script src="js/atendimento.js"></script>
 </body>
 </html>
