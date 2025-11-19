@@ -9,15 +9,14 @@
 
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="navbar-brand">🐾 PetShop</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
-            <a class="nav-link" href="pets.html">Pets</a>
-            <a class="nav-link" href="servico.html">Serviços</a>
-            <a class="nav-link" href="tutores.html">Tutores</a>
-        </div>
-    </nav>
+    
+    <div id="navbar"></div>
+
+  <!-- resto da página -->
+  <script type="module">
+    import { bootPage } from './js/api.js';
+    bootPage();
+  </script>
 
     <main class="container">
         <h1 class="h3 mb-3">Gerenciar Tutores</h1>

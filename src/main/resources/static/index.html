@@ -6,19 +6,18 @@
     <title>PetShop</title>
     <link rel="stylesheet" href="css/app.css">
     <script src="js/extra.js" defer></script>
+    <script src="js/api.js"></script>
 </head>
 <body>
-    <!-- Navegação -->
-    <nav class="navbar">
-        <a href="index.html" class="navbar-brand">🐾 PetShop</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
-            <a class="nav-link" href="pets.html">Pets</a>
-            <a class="nav-link" href="servico.html">Serviços</a>
-            <a class="nav-link" href="tutores.html">Tutores</a>
-        </div>
-    </nav>
+    <div id="navbar"></div>
 
+  <!-- resto da página -->
+  <script type="module">
+    import { bootPage } from './js/api.js';
+    bootPage();
+  </script>
+   
+    
     <!-- Conteúdo principal -->
     <main class="container">
         <div class="gallery" id="gallery"></div> <!-- Fundo com imagens -->

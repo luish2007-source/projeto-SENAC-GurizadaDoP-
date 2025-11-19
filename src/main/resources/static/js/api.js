@@ -1,97 +1,114 @@
-// Caminho: src/main/resources/static/js/api.js
+/* js/api.js */
+const API_BASE = '/api'; // ajuste se seu backend estiver em outro caminho
 
-const API_BASE_URL = 'http://localhost:8080/api';
-
-/**
- * Lida com a resposta da fetch API.
- * @param {Response} response - O objeto de resposta da fetch.
- * @returns {Promise<any>} - O JSON da resposta.
- * @throws {Error} - Lança um erro se a resposta não for OK.
- */
-async function handleResponse(response) {
-    if (!response.ok) {
-        const errorData = await response.json().catch(() => ({}));
-        const errorMessage = errorData.message || `Erro ${response.status}: ${response.statusText}`;
-        throw new Error(errorMessage);
-    }
-    // Retorna JSON ou nada se for 204 No Content (ex: delete)
-    if (response.status === 204) {
-        return null;
-    }
-    return response.json();
+/* ===== Helpers REST ===== */
+export async function getJSON(url) {
+    const r = await fetch(joinUrl(url), {
+        headers: authHeader()
+    });
+    if (!r.ok) throw new Error(`GET ${url} -> ${r.status}`);
+    return r.json();
+}
+export async function postJSON(url, body) {
+    const r = await fetch(joinUrl(url), {
+        method: 'POST',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader()),
+        body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
+}
+export async function putJSON(url, body) {
+    const r = await fetch(joinUrl(url), {
+        method: 'PUT',
+        headers: Object.assign({ 'Content-Type': 'application/json' }, authHeader()),
+        body: JSON.stringify(body)
+    });
+    if (!r.ok) throw new Error(await r.text());
+    return r.json();
+}
+export async function del(url) {
+    const r = await fetch(joinUrl(url), {
+        method: 'DELETE',
+        headers: authHeader()
+    });
+    if (!r.ok) throw new Error(await r.text());
 }
 
-/**
- * Função genérica para requisições 'fetch'.
- * @param {string} endpoint - O caminho da API (ex: '/pets')
- * @param {RequestInit} options - As opções da fetch (method, headers, body)
- * @returns {Promise<any>}
- */
-async function request(endpoint, options) {
-    const url = `${API_BASE_URL}${endpoint}`;
-    const defaultOptions = {
-        headers: {
-            'Content-Type': 'application/json',
-        },
-    };
+/* ===== util ===== */
+function joinUrl(url) {
+    // if absolute (starts with http or /) return as is, else join with API_BASE
+    if (/^(https?:)?\/\//.test(url) || url.startsWith('/')) return url;
+    return `${API_BASE}/${url}`;
+}
 
-    const config = {
-        ...defaultOptions,
-        ...options,
-        headers: {
-            ...defaultOptions.headers,
-            ...options?.headers,
-        },
-    };
-
+function authHeader() {
+    const raw = localStorage.getItem('admin');
+    if (!raw) return {};
     try {
-        const response = await fetch(url, config);
-        return await handleResponse(response);
-    } catch (error) {
-        console.error(`Falha na requisição para ${endpoint}:`, error);
-        throw error; // Re-lança o erro para o chamador (o .js da página)
+        const obj = JSON.parse(raw);
+        if (obj && obj.token) return { 'Authorization': `Bearer ${obj.token}` };
+    } catch { /* ignore */ }
+    return {};
+}
+
+/* ===== Auth simples ===== */
+export function getUser() {
+    try { return JSON.parse(localStorage.getItem('admin') || 'null'); }
+    catch { return null; }
+}
+
+export function requireAuth(redirectTo = '/login.html') {
+    if (!getUser()) {
+        location.href = redirectTo;
     }
 }
 
-// Expõe o objeto API globalmente
-window.API = {
-    // --- Funções de Tutor ---
-    listTutores: (pageable) => {
-        const params = new URLSearchParams(pageable); // ex: page=0&size=10
-        return request(`/tutores?${params}`, { method: 'GET' });
-    },
-    getTutor: (id) => request(`/tutores/${id}`, { method: 'GET' }),
-    createTutor: (tutorData) => request('/tutores', { method: 'POST', body: JSON.stringify(tutorData) }),
-    updateTutor: (id, tutorData) => request(`/tutores/${id}`, { method: 'PUT', body: JSON.stringify(tutorData) }),
-    deleteTutor: (id) => request(`/tutores/${id}`, { method: 'DELETE' }),
+export function logout() {
+    localStorage.removeItem('admin');
+}
 
-    // --- Funções de Pet ---
-    listPets: (pageable) => {
-        const params = new URLSearchParams(pageable);
-        return request(`/pets?${params}`, { method: 'GET' });
-    },
-    getPet: (id) => request(`/pets/${id}`, { method: 'GET' }),
-    createPet: (petData) => request('/pets', { method: 'POST', body: JSON.stringify(petData) }),
-    updatePet: (id, petData) => request(`/pets/${id}`, { method: 'PUT', body: JSON.stringify(petData) }),
-    deletePet: (id) => request(`/pets/${id}`, { method: 'DELETE' }),
+/* ===== Navbar parcial ===== */
+export async function loadNavbar() {
+    const host = document.getElementById('navbar');
+    if (!host) return;
 
-    // --- Funções de Serviço ---
-    listServicos: (pageable) => {
-        const params = new URLSearchParams(pageable);
-        return request(`/servicos?${params}`, { method: 'GET' });
-    },
-    getServico: (id) => request(`/servicos/${id}`, { method: 'GET' }),
-    createServico: (servicoData) => request('/servicos', { method: 'POST', body: JSON.stringify(servicoData) }),
-    updateServico: (id, servicoData) => request(`/servicos/${id}`, { method: 'PUT', body: JSON.stringify(servicoData) }),
-    deleteServico: (id) => request(`/servicos/${id}`, { method: 'DELETE' }),
+    // fetch partial (caminho: /partials/navbar.html)
+    const html = await fetch('/partials/navbar.html').then(r => r.text());
+    host.innerHTML = html;
 
-    // --- Funções de Atendimento ---
-    listAtendimentos: (pageable) => {
-        const params = new URLSearchParams(pageable);
-        return request(`/atendimentos?${params}`, { method: 'GET' });
-    },
-    getAtendimento: (id) => request(`/atendimentos/${id}`, { method: 'GET' }),
-    createAtendimento: (atendimentoData) => request('/atendimentos', { method: 'POST', body: JSON.stringify(atendimentoData) }),
-    updateAtendimento: (id, atendimentoData) => request(`/atendimentos/${id}`, { method: 'PUT', body: JSON.stringify(atendimentoData) }),
-    deleteAtendimento: (id) => request(`/atendimentos/${id}`, { method: 'DELETE' }),
-};
+    // ativa link atual (baseado em data-route)
+    const file = location.pathname.split('/').pop() || 'index.html';
+    const route = file.replace('.html', '');
+    const active = host.querySelector(`a.nav-link[data-route="${route}"]`);
+    if (active) {
+        // remove active de outros (caso parcial reutilizada)
+        host.querySelectorAll('a.nav-link.active').forEach(a => a.classList.remove('active'));
+        active.classList.add('active');
+    }
+
+    // Info usuário + logout
+    const u = getUser();
+    const userInfo = host.querySelector('#userInfo');
+    if (u && userInfo) userInfo.textContent = u.nome || '';
+
+    const btnLogout = host.querySelector('#btnLogout');
+    if (btnLogout) {
+        btnLogout.addEventListener('click', () => {
+            if (confirm('Deseja realmente sair?')) {
+                logout();
+                location.href = '/login.html';
+            }
+        });
+    }
+}
+
+/* ===== Boot padrão páginas internas ===== */
+/*
+  Observação: você disse que não quer forçar proteção nas páginas.
+  Portanto bootPage NÃO chama requireAuth automaticamente. Se quiser proteger
+  alguma página, chame requireAuth() no script dessa página.
+*/
+export async function bootPage() {
+    await loadNavbar();
+}

@@ -7,15 +7,15 @@
     <link rel="stylesheet" href="css/pets.css">
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="navbar-brand">🐾 PetShop</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
-            <a class="nav-link" href="pets.html">Pets</a>
-            <a class="nav-link" href="servico.html">Serviços</a>
-            <a class="nav-link" href="tutores.html">Tutores</a>
-        </div>
-    </nav>
+    <div id="navbar"></div>
+
+  <!-- resto da página -->
+  <script type="module">
+    import { bootPage } from './js/api.js';
+    import './js/pets.js';
+    bootPage();
+  </script>
+
     <main class="container py-4"> 
         <h1 class="h3 mb-3">Gerenciar Pets</h1> 
         <form id="petForm" class="row g-3 mb-4"> 
@@ -34,10 +34,6 @@
     <div class="col-md-3"> 
         <label class="form-label">Nascimento</label> 
         <input id="dataNascimento" type="date" class="form-control"> 
-    </div> 
-    <div class="col-md-3"> 
-        <label class="form-label">Tutor*</label> 
-        <select id="tutorId" class="form-select" required></select> 
     </div> 
     <div class="col-12"> 
         <button class="btn btn-primary" type="submit">Salvar</button> 

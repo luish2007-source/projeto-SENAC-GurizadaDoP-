@@ -7,15 +7,13 @@
     <link rel="stylesheet" href="css/servico.css">
 </head>
 <body>
-    <nav class="navbar">
-        <a href="index.html" class="navbar-brand">🐾 PetShop</a>
-        <div class="navbar-nav">
-            <a class="nav-link" href="atendimentos.html">Atendimentos</a>
-            <a class="nav-link" href="pets.html">Pets</a>
-            <a class="nav-link" href="servico.html">Serviços</a>
-            <a class="nav-link" href="tutores.html">Tutores</a>
-        </div>
-    </nav>
+    <div id="navbar"></div>
+
+  <!-- resto da página -->
+  <script type="module">
+    import { bootPage } from './js/api.js';
+    bootPage();
+  </script>
 
     <footer>
         &copy; 2025 PetShop — Todos os direitos reservados.
