@@ -2,37 +2,51 @@
 body {
     margin: 0;
     font-family: Arial, sans-serif;
+    background-color: #1a1a1a !important;
     color: #fff;
-    background-color: #111;
     overflow-x: hidden;
 }
 
-/* --- Navbar (opcional, se tiver no resto do sistema) --- */
+/* --- Navbar --- */
 .navbar {
     display: flex;
-    height: 60px;
-    justify-content: space-between;
+    justify-content: space-between; 
     align-items: center;
-    background-color: #222;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+    padding: 15px 20px;
+    background-color: #1a1a1a;  /* pode mudar depois */
 }
 
-.navbar-brand {
-    font-size: 1.5rem;
+/* Se tiver uma UL no menu */
+.navbar ul {
+    list-style: none;
+    display: flex;
+    gap: 20px;
+    margin: 0;
+    padding: 0;
+}
+
+.navbar ul li a {
     color: #fff;
     text-decoration: none;
 }
 
+
+
+.navbar-brand {
+    font-size: 1.5rem;
+    color: #fff !important;
+    text-decoration: none;
+}
+
 .navbar-nav a {
-    color: #ddd;
+    color: #ddd !important;
     margin-left: 1rem;
     text-decoration: none;
     transition: color 0.3s;
 }
 
 .navbar-nav a:hover {
-    color: #ff9800;
+    color: #0099ff !important;
 }
 
 /* --- Container principal --- */
@@ -50,130 +64,73 @@ h1 {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-    color: #ff9800;
+    color: #0099ff !important;
 }
 
-/* --- Formulário de tutor --- */
-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
-    margin-bottom: 2rem;
-}
-
-/* --- Linha de botões no formulário --- */
-.form-actions {
-    width: 100%;
-    display: flex;
-    justify-content: flex-end;
-    gap: 1rem;
-    margin-top: 1rem;
-}
-
-.form-actions .btn {
-    width: auto;
-}
-
-
-.form-group {
-    flex: 1 1 45%;
-    min-width: 220px;
-}
-
+/* --- Formulário --- */
 .form-label {
-    display: block;
-    margin-bottom: 0.5rem;
     font-weight: bold;
+    color: #fff !important;
 }
 
 .form-control {
-    width: 100%;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #444;
-    border-radius: 6px;
-    background-color: #222;
-    color: #fff;
-    font-size: 1rem;
+    background-color: #222 !important;
+    border: 1px solid #444 !important;
+    color: #fff !important;
 }
 
 .form-control:focus {
-    border-color: #ff9800;
-    outline: none;
+    border-color: #0099ff !important;
+    box-shadow: 0 0 5px #0099ff !important;
 }
 
-/* --- Botão --- */
-.form-actions .btn {
-    padding: 0.7rem 1.5rem;
-    border: none;
-    border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
-    cursor: pointer;
-    transition: 0.3s;
-}
-
+/* --- Botões --- */
 .btn-primary {
-    background-color: #ff9800;
-    color: #111;
+    background-color: #0099ff !important;
+    border-color: #0099ff !important;
+    color: #111 !important;
+    font-weight: bold;
 }
 
 .btn-primary:hover {
-    background-color: #ffa726;
     transform: scale(1.05);
 }
 
-/* --- Tabela de tutores --- */
-.table {
-    width: 100%;
-    border-collapse: collapse;
-    margin-top: 1rem;
-    color: #fff;
+.btn-secondary {
+    background-color: #555 !important;
+    border-color: #555 !important;
+    color: #fff !important;
+    font-weight: bold;
 }
 
-.table th,
-.table td {
-    border-bottom: 1px solid #444;
-    padding: 0.8rem;
-    text-align: left;
+/* --- Tabela --- */
+.table {
+    color: #fff !important;
 }
 
 .table th {
-    background-color: #222;
-    color: #ff9800;
+    background-color: #222 !important;
+    color: #0099ff !important;
+    border-bottom: 1px solid #444 !important;
     text-transform: uppercase;
 }
 
+.table td {
+    border-bottom: 1px solid #444 !important;
+}
+
 .table-striped tbody tr:nth-child(even) {
-    background-color: #1a1a1a;
+    background-color: #1a1a1a !important;
 }
 
 .table-striped tbody tr:hover {
-    background-color: #2a2a2a;
+    background-color: #2a2a2a !important;
 }
 
+/* --- Footer --- */
 footer {
     background-color: #111;
     text-align: center;
     padding: 1rem;
     color: #aaa;
-}
-
-/* --- Alinhamento à direita --- */
-.text-end {
-    text-align: right;
-}
-
-/* --- Responsividade --- */
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-
-    form {
-        flex-direction: column;
-    }
-
-    .form-actions .btn {
-        width: 100%;
-    }
 }
