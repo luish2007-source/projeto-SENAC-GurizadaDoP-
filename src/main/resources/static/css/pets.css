@@ -1,173 +1,194 @@
-/* --- Reset e base --- */
+/* ====== Layout Geral ====== */
 body {
     margin: 0;
+    padding: 0;
     font-family: Arial, sans-serif;
+    background: #111;
     color: #fff;
-    background-color: #111;
-    overflow-x: hidden;
 }
 
-/* --- Navbar --- */
 .navbar {
-    display: flex;
-    height: 60px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #222;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;     /* evita quebra de linha */
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  padding: 12px 20px !important;
+  background-color: #222 !important;
+  box-sizing: border-box !important;
 }
 
+/* Garante que marca e menu não ocupem 100% cada um */
 .navbar-brand {
-    font-size: 1.5rem;
-    color: #fff;
-    text-decoration: none;
+  flex: 0 0 auto !important;
+  margin-right: 1rem !important;
+  white-space: nowrap !important;
 }
 
-.navbar-nav a {
-    color: #ddd;
-    margin-left: 1rem;
-    text-decoration: none;
-    transition: color 0.3s;
+/* Menu de links: força linha, sem quebra */
+.navbar-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
 }
 
-.navbar-nav a:hover {
-    color: #ff9800;
+/* Links: evita que ocupem toda largura e quebram linha */
+.navbar-nav .nav-link {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  padding: 8px 10px !important;
+  color: #ddd !important;
 }
 
-/* --- Container principal --- */
+/* Se o Bootstrap estiver aplicando largura 100% (ex.: .w-100), anulamos */
+.navbar .w-100, .navbar .col-12 {
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+/* debug visual — remova depois se quiser */
+.navbar, .navbar-brand, .navbar-nav, .navbar-nav .nav-link {
+  /* border: 1px dashed rgba(255,255,255,0.06); */ /* descomente para ver limites */
+}
+
+/* Forçar comportamento em telas pequenas (se uma media query do Bootstrap estiver empilhando) */
+@media (max-width: 767px) {
+  .navbar {
+    /* se quiser sempre manter horizontal nos mobiles, com overflow auto */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .navbar-nav { gap: 12px !important; }
+}
+
+a {
+    text-decoration: none !important;
+}
+
+/* ====== Container central ====== */
 .container {
+    width: 90%;
     max-width: 1200px;
-    margin: 2rem auto;
-    padding: 2rem;
-    background: rgba(34, 34, 34, 0.8);
-    border-radius: 10px;
-    box-shadow: 0 0 10px rgba(0,0,0,0.6);
+    margin: 40px auto;
+    background: #1c1c1c;
+    padding: 35px;
+    border-radius: 12px;
+    box-shadow: 0 0 20px rgba(0, 0, 0, 0.45);
 }
 
-/* --- Títulos --- */
-h1 {
+/* ====== Título ====== */
+h2 {
     text-align: center;
-    margin-bottom: 2rem;
-    font-size: 2rem;
-    color: #ff9800;
+    color: #3fa2ff;
+    margin-bottom: 30px;
 }
 
-/* --- Formulário --- */
-form {
-    display: flex;
-    flex-wrap: wrap;
-    gap: 1rem;
+/* ====== Grid do formulário ====== */
+.form-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 18px;
 }
 
-.form-label {
-    display: block;
-    margin-bottom: 0.5rem;
+label {
     font-weight: bold;
-}
-
-.form-control,
-.form-select {
-    width: 100%;
-    padding: 0.6rem 0.8rem;
-    border: 1px solid #444;
-    border-radius: 6px;
-    background-color: #222;
     color: #fff;
-    font-size: 1rem;
 }
 
-.form-control:focus,
-.form-select:focus {
-    border-color: #ff9800;
+input,
+select {
+    width: 100%;
+    padding: 10px;
+    border-radius: 6px;
+    border: 1px solid #444;
+    background: #2a2a2a;
+    color: #fff;
+    font-size: 15px;
+}
+
+input:focus,
+select:focus {
+    border-color: #3fa2ff;
     outline: none;
 }
 
-/* --- Botões --- */
-.btn {
-    padding: 0.7rem 1.5rem;
+/* ====== Botões ====== */
+.botoes-form {
+    margin-top: 20px;
+    display: flex;
+    gap: 15px;
+}
+
+button.btn {
+    background: #007bff;
+    padding: 10px 16px;
     border: none;
     border-radius: 6px;
-    font-size: 1rem;
-    font-weight: bold;
+    color: #fff;
     cursor: pointer;
-    transition: 0.3s;
+    transition: 0.2s;
 }
 
-.btn-primary {
-    background-color: #ff9800;
-    color: #111;
+button.btn:hover {
+    background: #005ec2;
 }
 
-.btn-primary:hover {
-    background-color: #ffa726;
-    transform: scale(1.05);
+button.btn.excluir {
+    background: #c0392b;
 }
 
-.btn-secondary {
-    background-color: #555;
-    color: #fff;
-    margin-left: 0.5rem;
+button.btn.excluir:hover {
+    background: #99271e;
 }
 
-.btn-secondary:hover {
-    background-color: #666;
-    transform: scale(1.05);
+button.btn.editar {
+    background: #f39c12;
 }
 
-/* --- Tabela --- */
-.table {
+button.btn.editar:hover {
+    background: #c87f0a;
+}
+
+/* ====== Tabela ====== */
+table {
     width: 100%;
+    margin-top: 35px;
     border-collapse: collapse;
-    margin-top: 2rem;
+    background: #fff;
+    color: #000;
+    border-radius: 8px;
+    overflow: hidden;
+}
+
+thead {
+    background: #333;
     color: #fff;
 }
 
-.table th,
-.table td {
-    border-bottom: 1px solid #444;
-    padding: 0.8rem;
+table th {
+    padding: 12px;
     text-align: left;
 }
 
-.table th {
-    background-color: #222;
-    color: #ff9800;
-    text-transform: uppercase;
+table td {
+    padding: 12px;
+    border-bottom: 1px solid #ccc;
 }
 
-.table-striped tbody tr:nth-child(even) {
-    background-color: #1a1a1a;
+tr:hover {
+    background: #f2f2f2;
 }
 
-.table-striped tbody tr:hover {
-    background-color: #2a2a2a;
-}
-
-/* --- Ações alinhadas à direita --- */
-.text-end {
-    text-align: right;
-}
-
-/* --- Rodapé --- */
 footer {
-    background-color: #111;
     text-align: center;
-    padding: 1rem;
-    color: #aaa;
+    padding: 15px 0;
+    margin-top: 40px;
+    color: #555;
 }
 
-/* --- Responsividade --- */
-@media (max-width: 768px) {
-    .container {
-        padding: 1rem;
-    }
-
-    form {
-        flex-direction: column;
-    }
-
-    .btn {
-        width: 100%;
-    }
-}

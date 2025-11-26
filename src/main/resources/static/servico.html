@@ -1,22 +1,79 @@
 <!DOCTYPE html>
 <html lang="pt-br">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Serviços</title>
+
+    <!-- CSS -->
     <link rel="stylesheet" href="css/servico.css">
 </head>
+
 <body>
-    <div id="navbar"></div>
 
-  <!-- resto da página -->
-  <script type="module">
-    import { bootPage } from './js/api.js';
-    bootPage();
-  </script>
+    <!-- Navbar -->
+    <header id="navbar"></header>
 
+    <!-- Boot da página (carrega navbar) -->
+    <script type="module">
+        import { bootPage } from './js/api.js';
+        bootPage();
+    </script>
+
+    <main class="container py-4">
+        <h1 class="h3 mb-3">Gerenciar Serviços</h1>
+
+        <!-- Formulário -->
+        <form id="serviceForm" class="row g-3 mb-4">
+            <input type="hidden" id="serviceId">
+
+            <div class="col-md-4">
+                <label class="form-label">Nome do Serviço*</label>
+                <input id="nome" class="form-control" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Valor (R$)*</label>
+                <input id="valor" type="number" step="0.01" class="form-control" required>
+            </div>
+
+            <div class="col-md-4">
+                <label class="form-label">Duração (min)</label>
+                <input id="duracao" type="number" class="form-control">
+            </div>
+
+            <div class="col-12">
+                <button class="btn btn-primary" type="submit">Salvar</button>
+                <button class="btn btn-secondary" type="button" id="btnLimpar">Limpar</button>
+            </div>
+        </form>
+
+        <!-- Tabela -->
+        <div class="table-responsive">
+            <table class="table table-striped align-middle" id="tblServicos">
+                <thead>
+                    <tr>
+                        <th>#</th>
+                        <th>Serviço</th>
+                        <th>Valor</th>
+                        <th>Duração</th>
+                        <th class="text-end">Ações</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+    </main>
+
+    <!-- Rodapé -->
     <footer>
-        &copy; 2025 PetShop — Todos os direitos reservados.
+        © 2025 PetShop — Todos os direitos reservados.
     </footer>
+
+    <!-- Script principal da página -->
+    <script type="module" src="./js/servico.js"></script>
 </body>
+
 </html>

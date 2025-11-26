@@ -1,94 +1,142 @@
-/* js/pets.js */
-import { getJSON, postJSON, putJSON, del } from './api.js';
+const apiBaseUrl = "http://localhost:8080/api";
 
-const form = document.getElementById('petForm');
-const tbl = document.querySelector('#tblPets tbody');
-const btnLimpar = document.getElementById('btnLimpar');
+window.carregarTutores = carregarTutores;
+window.listarPets = listarPets;
+window.editarPet = editarPet;
+window.excluirPet = excluirPet;
 
-loadPets();
+// ------------------------------
+// CARREGAR TUTORES
+// ------------------------------
+async function carregarTutores() {
+    const response = await fetch(`${apiBaseUrl}/tutores?page=0&size=50`);
+    const data = await response.json();
 
-/* ===== Carregar lista ===== */
-async function loadPets(page = 0) {
-    const data = await getJSON(`/api/pets?page=${page}`);
+    const select = document.getElementById("tutorId");
+    select.innerHTML = "<option value=''>Selecione</option>";
 
-    const pets = data.content; // <<--- AQUI ESTÁ O SEGREDO!!!
-    tbl.innerHTML = '';
+    data.content.forEach(tutor => {
+        const option = document.createElement("option");
+        option.value = tutor.id;
+        option.textContent = tutor.nome;
+        select.appendChild(option);
+    });
+}
 
-    pets.forEach(p => {
-        const tr = document.createElement('tr');
+// ------------------------------
+// LISTAR PETS
+// ------------------------------
+async function listarPets() {
+    const response = await fetch(`${apiBaseUrl}/pets?page=0&size=50`);
+    const data = await response.json();
+
+    const tbody = document.querySelector("#tblPets tbody");
+    tbody.innerHTML = "";
+
+    data.content.forEach(pet => {
+        const tr = document.createElement("tr");
+        const nomeTutor = pet.tutor ? pet.tutor.nome : "—";
+
         tr.innerHTML = `
-            <td>${p.id}</td>
-            <td>${p.nome}</td>
-            <td>${p.especie}</td>
-            <td>${p.raca ?? ''}</td>
-            <td>${p.tutorNome ?? ''}</td>
-
+            <td>${pet.id}</td>
+            <td>${pet.nome}</td>
+            <td>${pet.especie}</td>
+            <td>${pet.raca || ""}</td>
+            <td>${nomeTutor}</td>
             <td class="text-end">
-                <button class="btn btn-sm btn-warning me-2" data-edit="${p.id}">Editar</button>
-                <button class="btn btn-sm btn-danger" data-del="${p.id}">Excluir</button>
+                <button class="btn btn-sm btn-warning" onclick="editarPet(${pet.id})">Editar</button>
+                <button class="btn btn-sm btn-danger" onclick="excluirPet(${pet.id})">Excluir</button>
             </td>
         `;
-        tbl.appendChild(tr);
-    });
 
-    bindActions();
-}
-
-/* ===== Eventos de cada botão ===== */
-function bindActions() {
-    document.querySelectorAll('[data-edit]').forEach(btn => {
-        btn.onclick = () => editPet(btn.dataset.edit);
-    });
-
-    document.querySelectorAll('[data-del]').forEach(btn => {
-        btn.onclick = () => removePet(btn.dataset.del);
+        tbody.appendChild(tr);
     });
 }
 
-/* ===== Enviar formulário ===== */
-form.addEventListener('submit', async (e) => {
-    e.preventDefault();
+// ------------------------------
+// SALVAR PET
+// ------------------------------
+async function salvarPet(e) {
+    e.preventDefault(); // impedir reload do form
 
-    const data = {
-        nome: nome.value.trim(),
-        especie: especie.value.trim(),
-        raca: raca.value.trim() || null,
-        dataNascimento: dataNascimento.value || null
+    const id = document.getElementById("petId").value;
+    const nome = document.getElementById("nome").value;
+    const especie = document.getElementById("especie").value;
+    const raca = document.getElementById("raca").value;
+    const dataNascimento = document.getElementById("dataNascimento").value;
+    const tutorId = document.getElementById("tutorId").value;
+
+    const pet = {
+        nome,
+        especie,
+        raca,
+        dataNascimento,
+        tutorId: Number(tutorId)
     };
 
-    const id = petId.value;
+    const metodo = id ? "PUT" : "POST";
+    const url = id ? `${apiBaseUrl}/pets/${id}` : `${apiBaseUrl}/pets`;
 
-    if (!id) {
-        await postJSON('/api/pets', data);
-    } else {
-        await putJSON(`/api/pets/${id}`, data);
+    const response = await fetch(url, {
+        method: metodo,
+        headers: { "Content-Type": "application/json" },
+        body: JSON.stringify(pet)
+    });
+
+    if (!response.ok) {
+        alert("Erro ao salvar pet");
+        return;
     }
 
-    form.reset();
-    petId.value = '';
-    await loadPets();
-});
-
-/* ===== Editar ===== */
-async function editPet(id) {
-    const p = await getJSON(`/api/pets/${id}`);
-
-    petId.value = p.id;
-    nome.value = p.nome;
-    especie.value = p.especie;
-    raca.value = p.raca ?? '';
-    dataNascimento.value = p.dataNascimento ?? '';
+    limparFormulario();
+    listarPets();
 }
 
-/* ===== Excluir ===== */
-async function removePet(id) {
-    if (!confirm('Excluir este pet?')) return;
-    await del(`/api/pets/${id}`);
-    loadPets();
+// ------------------------------
+// EDITAR
+// ------------------------------
+async function editarPet(id) {
+    const response = await fetch(`${apiBaseUrl}/pets/${id}`);
+    const pet = await response.json();
+
+    document.getElementById("petId").value = pet.id;
+    document.getElementById("nome").value = pet.nome;
+    document.getElementById("especie").value = pet.especie;
+    document.getElementById("raca").value = pet.raca;
+    document.getElementById("dataNascimento").value = pet.dataNascimento;
+    document.getElementById("tutorId").value = pet.tutor.id;
 }
 
-/* ===== Limpar ===== */
-btnLimpar.addEventListener('click', () => {
-    form.reset();
-    petId.value = '';
-});
+// ------------------------------
+// EXCLUIR
+// ------------------------------
+async function excluirPet(id) {
+    if (!confirm("Tem certeza que deseja excluir?")) return;
+
+    await fetch(`${apiBaseUrl}/pets/${id}`, { method: "DELETE" });
+
+    listarPets();
+}
+
+// ------------------------------
+// LIMPAR FORM
+// ------------------------------
+function limparFormulario() {
+    document.getElementById("petId").value = "";
+    document.getElementById("nome").value = "";
+    document.getElementById("especie").value = "";
+    document.getElementById("raca").value = "";
+    document.getElementById("dataNascimento").value = "";
+    document.getElementById("tutorId").value = "";
+}
+
+// ------------------------------
+// INICIAR PÁGINA
+// ------------------------------
+window.onload = () => {
+    document.getElementById("petForm").addEventListener("submit", salvarPet);
+    document.getElementById("btnLimpar").addEventListener("click", limparFormulario);
+
+    carregarTutores();
+    listarPets();
+};

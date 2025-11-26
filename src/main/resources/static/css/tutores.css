@@ -7,12 +7,10 @@ body {
     overflow-x: hidden;
 }
 
-/* --- Navbar --- */
-/* === Força navbar horizontal e impede que quebre === */
 .navbar {
   display: flex !important;
   flex-direction: row !important;
-  flex-wrap: nowrap !important;     /* evita quebra de linha */
+  flex-wrap: nowrap !important;     
   align-items: center !important;
   justify-content: space-between !important;
   gap: 1rem !important;
@@ -21,14 +19,12 @@ body {
   box-sizing: border-box !important;
 }
 
-/* Garante que marca e menu não ocupem 100% cada um */
 .navbar-brand {
   flex: 0 0 auto !important;
   margin-right: 1rem !important;
   white-space: nowrap !important;
 }
 
-/* Menu de links: força linha, sem quebra */
 .navbar-nav {
   display: flex !important;
   flex-direction: row !important;
@@ -40,7 +36,6 @@ body {
   flex: 0 0 auto !important;
 }
 
-/* Links: evita que ocupem toda largura e quebram linha */
 .navbar-nav .nav-link {
   display: inline-block !important;
   white-space: nowrap !important;
@@ -48,21 +43,18 @@ body {
   color: #ddd !important;
 }
 
-/* Se o Bootstrap estiver aplicando largura 100% (ex.: .w-100), anulamos */
 .navbar .w-100, .navbar .col-12 {
   width: auto !important;
   flex: 0 0 auto !important;
 }
 
-/* debug visual — remova depois se quiser */
+
 .navbar, .navbar-brand, .navbar-nav, .navbar-nav .nav-link {
-  /* border: 1px dashed rgba(255,255,255,0.06); */ /* descomente para ver limites */
+ 
 }
 
-/* Forçar comportamento em telas pequenas (se uma media query do Bootstrap estiver empilhando) */
 @media (max-width: 767px) {
   .navbar {
-    /* se quiser sempre manter horizontal nos mobiles, com overflow auto */
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
@@ -71,7 +63,7 @@ body {
 
 
 
-/* --- Container principal --- */
+
 .container {
     max-width: 1000px;
     margin: 2rem auto;
