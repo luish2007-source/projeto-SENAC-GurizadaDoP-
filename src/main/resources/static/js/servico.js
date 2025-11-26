@@ -12,9 +12,9 @@ async function listarServicos() {
 
         tr.innerHTML = `
             <td>${servico.id}</td>
-            <td>${servico.nome}</td>
-            <td>R$ ${servico.valor.toFixed(2)}</td>
-            <td>${servico.duracao || "—"} min</td>
+            <td>${servico.descricao}</td>
+            <td>R$ ${Number(servico.valor).toFixed(2)}</td>
+            <td>${servico.duracaoMinutos} min</td>
             <td class="text-end">
                 <button class="btn btn-warning btn-sm" onclick="editarServico(${servico.id})">Editar</button>
                 <button class="btn btn-danger btn-sm" onclick="excluirServico(${servico.id})">Excluir</button>
@@ -27,11 +27,11 @@ async function listarServicos() {
 
 async function salvarServico() {
     const id = document.getElementById("serviceId").value;
-    const nome = document.getElementById("nome").value;
+    const descricao = document.getElementById("nome").value;
     const valor = Number(document.getElementById("valor").value);
-    const duracao = document.getElementById("duracao").value;
+    const duracaoMinutos = Number(document.getElementById("duracao").value);
 
-    const servico = { nome, valor, duracao };
+    const servico = { descricao, valor, duracaoMinutos };
 
     const metodo = id ? "PUT" : "POST";
     const url = id
@@ -58,9 +58,9 @@ async function editarServico(id) {
     const servico = await response.json();
 
     document.getElementById("serviceId").value = servico.id;
-    document.getElementById("nome").value = servico.nome;
+    document.getElementById("nome").value = servico.descricao;
     document.getElementById("valor").value = servico.valor;
-    document.getElementById("duracao").value = servico.duracao;
+    document.getElementById("duracao").value = servico.duracaoMinutos;
 }
 
 async function excluirServico(id) {

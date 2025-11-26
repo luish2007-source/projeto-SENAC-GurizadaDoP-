@@ -7,32 +7,68 @@ body {
     overflow-x: hidden;
 }
 
-/* --- Navbar (Padrão do site) --- */
 .navbar {
-    display: flex;
-    height: 60px;
-    justify-content: space-between;
-    align-items: center;
-    background-color: #222;
-    padding: 1rem 2rem;
-    box-shadow: 0 2px 6px rgba(0,0,0,0.4);
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;     /* evita quebra de linha */
+  align-items: center !important;
+  justify-content: space-between !important;
+  gap: 1rem !important;
+  padding: 12px 20px !important;
+  background-color: #222 !important;
+  box-sizing: border-box !important;
 }
 
+/* Garante que marca e menu não ocupem 100% cada um */
 .navbar-brand {
-    font-size: 1.5rem;
-    color: #fff;
-    text-decoration: none;
+  flex: 0 0 auto !important;
+  margin-right: 1rem !important;
+  white-space: nowrap !important;
 }
 
-.navbar-nav a {
-    color: #ddd;
-    margin-left: 1rem;
-    text-decoration: none;
-    transition: color 0.3s;
+/* Menu de links: força linha, sem quebra */
+.navbar-nav {
+  display: flex !important;
+  flex-direction: row !important;
+  flex-wrap: nowrap !important;
+  align-items: center !important;
+  gap: 16px !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  flex: 0 0 auto !important;
 }
 
-.navbar-nav a:hover {
-    color: #ff9800;
+/* Links: evita que ocupem toda largura e quebram linha */
+.navbar-nav .nav-link {
+  display: inline-block !important;
+  white-space: nowrap !important;
+  padding: 8px 10px !important;
+  color: #ddd !important;
+}
+
+/* Se o Bootstrap estiver aplicando largura 100% (ex.: .w-100), anulamos */
+.navbar .w-100, .navbar .col-12 {
+  width: auto !important;
+  flex: 0 0 auto !important;
+}
+
+/* debug visual — remova depois se quiser */
+.navbar, .navbar-brand, .navbar-nav, .navbar-nav .nav-link {
+  /* border: 1px dashed rgba(255,255,255,0.06); */ /* descomente para ver limites */
+}
+
+/* Forçar comportamento em telas pequenas (se uma media query do Bootstrap estiver empilhando) */
+@media (max-width: 767px) {
+  .navbar {
+    /* se quiser sempre manter horizontal nos mobiles, com overflow auto */
+    overflow-x: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+  .navbar-nav { gap: 12px !important; }
+}
+
+a {
+    text-decoration: none !important;
 }
 
 /* --- Container principal --- */
@@ -45,12 +81,18 @@ body {
     box-shadow: 0 0 10px rgba(0,0,0,0.6);
 }
 
-/* --- Títulos --- */
+
 h1 {
     text-align: center;
     margin-bottom: 2rem;
     font-size: 2rem;
-    color: #ff9800;
+    color: #3fa2ff;
+}
+
+h2 {
+    text-align: center;
+    color: #3fa2ff;
+    margin-bottom: 30px;
 }
 
 /* --- Formulário de Atendimentos (Data, Pet, Serviço) --- */
@@ -114,8 +156,9 @@ textarea.form-control {
     resize: vertical;
 }
 
-.form-control:focus {
-    border-color: #ff9800;
+input:focus,
+select:focus {
+    border-color: #3fa2ff;
     outline: none;
 }
 
@@ -131,12 +174,12 @@ textarea.form-control {
 }
 
 .btn-primary {
-    background-color: #ff9800;
+    background-color: #3fa2ff;
     color: #111;
 }
 
 .btn-primary:hover {
-    background-color: #ffa726;
+    background-color: #5ab1ff;
     transform: scale(1.05);
 }
 
@@ -187,7 +230,7 @@ textarea.form-control {
 
 .table th {
     background-color: #222;
-    color: #ff9800;
+    color: #3fa2ff;
     text-transform: uppercase;
 }
 
